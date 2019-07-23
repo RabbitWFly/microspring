@@ -20,4 +20,11 @@ public interface BeanFactory {
      * @return
      */
     Object getBean(String beanId);
+
+    /**
+     * 注册 bean
+     * @param beanID
+     * @param bd
+     */
+    void registerBeanDefinition(String beanID, BeanDefinition bd);
 }

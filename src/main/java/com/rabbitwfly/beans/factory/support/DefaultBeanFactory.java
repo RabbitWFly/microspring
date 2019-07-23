@@ -27,14 +27,6 @@ public class DefaultBeanFactory implements BeanFactory {
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
 
     /**
-     * 根据文件名称加载，解析bean.xml
-     * @param configFile
-     */
-    public DefaultBeanFactory(String configFile){
-        loadBeanDefinition(configFile);
-    }
-
-    /**
      * 具体解析bean.xml 的方法，使用dom4j
      * @param configFile
      */
@@ -79,6 +71,11 @@ public class DefaultBeanFactory implements BeanFactory {
             throw new BeanCreationException("Bean Definition does not exist");
         }
 
+    }
+
+    @Override
+    public void registerBeanDefinition(String beanID, BeanDefinition bd) {
+        this.beanDefinitionMap.put(beanID, bd);
     }
 }
 
