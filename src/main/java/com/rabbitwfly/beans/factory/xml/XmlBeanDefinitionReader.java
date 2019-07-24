@@ -2,7 +2,7 @@ package com.rabbitwfly.beans.factory.xml;
 
 import com.rabbitwfly.beans.BeanDefinition;
 import com.rabbitwfly.beans.factory.BeanDefinitionStoreException;
-import com.rabbitwfly.beans.factory.BeanFactory;
+import com.rabbitwfly.beans.factory.support.BeanDefinitionRegistry;
 import com.rabbitwfly.beans.factory.support.GenericBeanDefinition;
 import com.rabbitwfly.util.ClassUtils;
 import org.dom4j.Document;
@@ -23,10 +23,10 @@ public class XmlBeanDefinitionReader {
 
     private static final String CLASS_ATTRIBUTE = "class";
 
-    BeanFactory beanFactory;
+    BeanDefinitionRegistry registry;
 
-    public XmlBeanDefinitionReader(BeanFactory beanFactory){
-        this.beanFactory = beanFactory;
+    public XmlBeanDefinitionReader(BeanDefinitionRegistry registry){
+        this.registry = registry;
     }
 
     /**
@@ -47,7 +47,7 @@ public class XmlBeanDefinitionReader {
                 String id = ele.attributeValue(ID_ATTRIBUTE);
                 String beanClassName = ele.attributeValue(CLASS_ATTRIBUTE);
                 BeanDefinition bd = new GenericBeanDefinition(id, beanClassName);
-                this.beanFactory.registerBeanDefinition(id, bd);
+                this.registry.registerBeanDefinition(id, bd);
             }
         } catch (Exception e) {
             throw new BeanDefinitionStoreException("IOException parsing XML document", e);
