@@ -4,7 +4,7 @@ import com.rabbitwfly.beans.BeanDefinition;
 import com.rabbitwfly.beans.factory.BeanDefinitionStoreException;
 import com.rabbitwfly.beans.factory.support.BeanDefinitionRegistry;
 import com.rabbitwfly.beans.factory.support.GenericBeanDefinition;
-import com.rabbitwfly.util.ClassUtils;
+import com.rabbitwfly.core.io.Resource;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -32,11 +32,10 @@ public class XmlBeanDefinitionReader {
     /**
      * 具体解析bean.xml的方法 使用dom4j
      *
-     * @param configFile
+     * @param resource
      */
-    public void loadBeanDefinition(String configFile) {
-        ClassLoader cl = ClassUtils.getDefaultClassLoader();
-        try (InputStream is = cl.getResourceAsStream(configFile)) {
+    public void loadBeanDefinition(Resource resource) {
+        try (InputStream is = resource.getInputStream()) {
             SAXReader reader = new SAXReader();
             Document doc = reader.read(is);
 
