@@ -1,8 +1,5 @@
 package com.rabbitwfly.context.support;
 
-import com.rabbitwfly.beans.factory.support.DefaultBeanFactory;
-import com.rabbitwfly.beans.factory.xml.XmlBeanDefinitionReader;
-import com.rabbitwfly.context.ApplicationContext;
 import com.rabbitwfly.core.io.ClassPathResource;
 import com.rabbitwfly.core.io.Resource;
 
@@ -11,20 +8,15 @@ import com.rabbitwfly.core.io.Resource;
  * Date 2019/7/30
  * 从classpath下读取bean.xml
  **/
-public class ClassPathXmlApplicationContext implements ApplicationContext {
-
-    private DefaultBeanFactory factory = null;
+public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
 
     public ClassPathXmlApplicationContext(String configFile) {
-       factory = new DefaultBeanFactory();
-        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
-        Resource resource = new ClassPathResource(configFile);
-        reader.loadBeanDefinition(resource);
+       super(configFile);
     }
 
     @Override
-    public Object getBean(String beanId) {
-        return factory.getBean(beanId);
+    protected Resource getResourcePath(String configFile) {
+        return new ClassPathResource(configFile);
     }
 }
 
