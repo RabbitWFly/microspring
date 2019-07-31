@@ -1,6 +1,10 @@
 package com.rabbitwfly.beans.factory.support;
 
 import com.rabbitwfly.beans.BeanDefinition;
+import com.rabbitwfly.beans.PropertyValue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author chentao
@@ -14,6 +18,7 @@ public class GenericBeanDefinition implements BeanDefinition {
     private boolean singleton = true;
     private boolean prototype = false;
     private String scope = SCOPE_DEFAULT;
+    List<PropertyValue> propertyValues = new ArrayList<>();
 
     public GenericBeanDefinition(String id, String beanClassName) {
         this.id = id;
@@ -45,6 +50,11 @@ public class GenericBeanDefinition implements BeanDefinition {
     @Override
     public String getBeanClassName() {
         return this.beanClassName;
+    }
+
+    @Override
+    public List<PropertyValue> getPropertyValues() {
+        return this.propertyValues;
     }
 }
 

@@ -1,4 +1,4 @@
-package com.rabbitwfly.v1;
+package com.rabbitwfly.tes_t.v1;
 
 import com.rabbitwfly.context.ApplicationContext;
 import com.rabbitwfly.context.support.ClassPathXmlApplicationContext;

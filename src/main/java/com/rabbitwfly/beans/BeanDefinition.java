@@ -1,5 +1,7 @@
 package com.rabbitwfly.beans;
 
+import java.util.List;
+
 /**
  * @Author chentao
  * Date 2019/7/19
@@ -52,5 +54,11 @@ public interface BeanDefinition {
      * @return
      */
     String getBeanClassName();
+
+    /**
+     * 获取bean.xmo 中的 property 标签内容 <property name ="accountDao" ref="accountDao"></property>
+     * @return
+     */
+    List<PropertyValue> getPropertyValues();
 }
 
