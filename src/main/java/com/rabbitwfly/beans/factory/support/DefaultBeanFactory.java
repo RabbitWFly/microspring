@@ -2,6 +2,7 @@ package com.rabbitwfly.beans.factory.support;
 
 import com.rabbitwfly.beans.BeanDefinition;
 import com.rabbitwfly.beans.PropertyValue;
+import com.rabbitwfly.beans.SimpleTypeConverter;
 import com.rabbitwfly.beans.factory.BeanCreationException;
 import com.rabbitwfly.beans.factory.BeanFactory;
 import com.rabbitwfly.util.ClassUtils;
@@ -68,7 +69,15 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
             return;
         }
 
+        // 处理 bean.xml 中的 ref 和 value 对应  RuntimeBeanReference TypedStringValue
+        //        <property name="itemDao" ref="itemDao"></property>
+        //        <property name="url" value="https://www.rabbitwfly.com/"></property>
         BeanDefinitionValueResolver valueResolver = new BeanDefinitionValueResolver(this);
+        // 处理bean.xml中的特殊类型 Integer Boolean Date 等
+        //        <property name="birthday" value="2019-01-21"></property>
+        //        <property name="flag" value="true"></property>
+        //        <property name="version" value="1"></property>
+        SimpleTypeConverter converter = new SimpleTypeConverter();
 
         try{
             for(PropertyValue pv : pvs){
@@ -76,13 +85,15 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
                 Object originalValue = pv.getValue();
                 Object resolvedValue = valueResolver.resolveValueIfNecessary(originalValue);
                 pv.setConvertedValue(resolvedValue);
+                pv.setConvertedValue(true);
                 //set 注入使用 java BeanInfo 实现
-                //此处需要查查资料
                 BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
                 PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
                 for (PropertyDescriptor pd : pds) {
                     if (pd.getName().equals(propertyName)) {
-                        pd.getWriteMethod().invoke(bean, resolvedValue);
+                        //类型转换
+                        Object convertedValue = converter.convertIfNecessary(resolvedValue, pd.getPropertyType());
+                        pd.getWriteMethod().invoke(bean, convertedValue);
                         break;
                     }
                 }
