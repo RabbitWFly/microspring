@@ -105,15 +105,21 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     }
 
     private Object instantiateBean(BeanDefinition bd){
-        ClassLoader cl = ClassUtils.getDefaultClassLoader();
-        String beanClassName = bd.getBeanClassName();
-        try{
-            //使用反射创建bean的实例，需要对象存在默认的无参构造方法
-            Class<?> clz = cl.loadClass(beanClassName);
-            return clz.newInstance();
-        } catch (Exception e){
-            throw new BeanCreationException("Bean Definition does not exist");
+        if(bd.hasConstructorArgumentValues()){
+            ConstructorResolver resolver = new ConstructorResolver(this);
+            return resolver.autowireConstructor(bd);
+        } else {
+            ClassLoader cl = ClassUtils.getDefaultClassLoader();
+            String beanClassName = bd.getBeanClassName();
+            try{
+                //使用反射创建bean的实例，需要对象存在默认的无参构造方法
+                Class<?> clz = cl.loadClass(beanClassName);
+                return clz.newInstance();
+            } catch (Exception e){
+                throw new BeanCreationException("Bean Definition does not exist");
+            }
         }
+
     }
 
 }

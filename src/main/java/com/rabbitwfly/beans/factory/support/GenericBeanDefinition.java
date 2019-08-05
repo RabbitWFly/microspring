@@ -1,6 +1,7 @@
 package com.rabbitwfly.beans.factory.support;
 
 import com.rabbitwfly.beans.BeanDefinition;
+import com.rabbitwfly.beans.ConstructorArgument;
 import com.rabbitwfly.beans.PropertyValue;
 
 import java.util.ArrayList;
@@ -18,7 +19,11 @@ public class GenericBeanDefinition implements BeanDefinition {
     private boolean singleton = true;
     private boolean prototype = false;
     private String scope = SCOPE_DEFAULT;
+    private Class beanClass;
+
+
     List<PropertyValue> propertyValues = new ArrayList<>();
+    private ConstructorArgument constructorArgument = new ConstructorArgument();
 
     public GenericBeanDefinition(String id, String beanClassName) {
         this.id = id;
@@ -55,6 +60,31 @@ public class GenericBeanDefinition implements BeanDefinition {
     @Override
     public List<PropertyValue> getPropertyValues() {
         return this.propertyValues;
+    }
+
+    @Override
+    public ConstructorArgument getConstructorArgument() {
+        return this.constructorArgument;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
+    }
+
+    @Override
+    public boolean hasConstructorArgumentValues() {
+        return !this.constructorArgument.isEmpty();
+    }
+
+    @Override
+    public Class getBeanClass() {
+        return beanClass;
+    }
+
+    @Override
+    public void setBeanClass(Class beanClass) {
+        this.beanClass = beanClass;
     }
 }
 

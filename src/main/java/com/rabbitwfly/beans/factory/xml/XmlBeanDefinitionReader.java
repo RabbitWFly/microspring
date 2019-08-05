@@ -1,6 +1,7 @@
 package com.rabbitwfly.beans.factory.xml;
 
 import com.rabbitwfly.beans.BeanDefinition;
+import com.rabbitwfly.beans.ConstructorArgument;
 import com.rabbitwfly.beans.PropertyValue;
 import com.rabbitwfly.beans.factory.BeanDefinitionStoreException;
 import com.rabbitwfly.beans.factory.config.RuntimeBeanReference;
@@ -43,6 +44,10 @@ public class XmlBeanDefinitionReader {
 
     public static final String NAME_ATTRIBUTE = "name";
 
+    public static final String CONSTRUCTOR_ARG_ELEMENT = "constructor-arg";
+
+    public static final String TYPE_ATTRIBUTE = "type";
+
     BeanDefinitionRegistry registry;
 
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry){
@@ -69,7 +74,7 @@ public class XmlBeanDefinitionReader {
                 if(ele.attribute(SCOPE_ATTRIBUTE) != null){
                     bd.setScope(ele.attributeValue(SCOPE_ATTRIBUTE));
                 }
-                //解析property标签
+                parseConstructorArgElements(ele, bd);
                 parsePropertyElement(ele, bd);
                 this.registry.registerBeanDefinition(id, bd);
             }
@@ -118,5 +123,29 @@ public class XmlBeanDefinitionReader {
             throw new RuntimeException(elementName + " must specify a ref or value");
         }
     }
+
+    private void parseConstructorArgElements(Element ele, BeanDefinition bd){
+        Iterator iterator = ele.elementIterator(CONSTRUCTOR_ARG_ELEMENT);
+        while(iterator.hasNext()){
+            Element element = (Element)iterator.next();
+            parseConstructorArgElement(element, bd);
+        }
+    }
+
+    private void parseConstructorArgElement(Element element, BeanDefinition bd){
+        String typeAttr = element.attributeValue(TYPE_ATTRIBUTE);
+        String nameAttr = element.attributeValue(NAME_ATTRIBUTE);
+        Object value = parsePropertyValue(element, bd, null);
+        ConstructorArgument.ValueHolder valueHolder = new ConstructorArgument.ValueHolder(value);
+        if(StringUtils.hasLength(typeAttr)){
+            valueHolder.setType(typeAttr);
+        }
+        if(StringUtils.hasLength(nameAttr)){
+            valueHolder.setName(nameAttr);
+        }
+        bd.getConstructorArgument().addArgumentValue(valueHolder);
+    }
+
+
 }
 
