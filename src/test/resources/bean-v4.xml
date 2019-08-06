@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context">
+
+    <!-- 扫描哪个包下面的文件 -->
+    <context:component-scan base-package="com.rabbitwfly.dao.v4,com.rabbitwfly.service.v4">
+
+    </context:component-scan>
+
+</beans>

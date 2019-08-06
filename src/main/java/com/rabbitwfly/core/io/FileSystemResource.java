@@ -15,6 +15,12 @@ public class FileSystemResource implements Resource {
     private String path;
     private File file;
 
+    public FileSystemResource(File file) {
+        this.path = file.getPath();
+        this.file = file;
+    }
+
+
     public FileSystemResource(String path){
         this.path = path;
         this.file = new File(path);
